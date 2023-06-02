@@ -28,11 +28,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      $dockerUsername = "$(DOCKER_USERNAME)"
-      $dockerPassword = "$(DOCKER_PASSWORD)"
-      $securePassword = ConvertTo-SecureString -String $dockerPassword -AsPlainText -Force
-      $credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $dockerUsername, $securePassword
-      $credential.GetNetworkCredential().Password | docker login --username $credential.UserName --password-stdin
+      docker login --username abhinavkataria12345@gmail.com --password-stdin abhi@12345
     workingDirectory: '$(Build.SourcesDirectory)'
 
 - task: PowerShell@2
