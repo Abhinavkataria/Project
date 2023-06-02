@@ -1,43 +1,51 @@
 trigger:
-- master
+- main
 
 pool:
   vmImage: 'ubuntu-latest'
 
-steps:
-
-# - task: Docker@2			#if Docker Image is used for deployment
-#   displayName: docker_build_push
-#   inputs:
-#     containerRegistry: 'Docker Hub'         #DockerHub Service Connection
-#     repository: sanju333/aspapp
-#     command: 'buildAndPush'
-#     Dockerfile: 'Dockerfile'
-#     tags: '$(Build.BuildId)'
-
-- task: oc-cmd@3
-  displayName: 'create new app'
+variables:
+  - group: DockerCreds		#Variable Group to store Creds	
+steps:  
+- task: PowerShell@2
+  displayName: Build
   inputs:
-    connectionType: 'OpenShift Connection Service'
-    openshiftService: 'OpenShift'
-    version: '4.12.0'
-    cmd: 'oc new-app --image-stream="openshift/dotnet:7.0" https://github.com/Abhinavkataria/Project.git --name=dummy'
-    #cmd: 'oc new-app sanju333/aspapp:$(Build.BuildId) --name=<app-name>'		#If docker Image is used for deployment
-    ignoreFlag: true
-
-- task: oc-cmd@3
-  displayName: 'create service'
+    targetType: 'inline'
+    script: |
+      docker build -t denny:latest .
+    workingDirectory: '$(Build.SourcesDirectory)'
+  
+- task: PowerShell@2
+  displayName: Tag
   inputs:
-    connectionType: 'OpenShift Connection Service'
-    openshiftService: 'OpenShift'
-    version: '4.12.0'
-    cmd: 'oc expose svc/dummy'
-    ignoreFlag: true
+    targetType: 'inline'
+    script: |
+      docker tag denny:latest abhikataria/denn:latest
+    workingDirectory: '$(Build.SourcesDirectory)'
 
-- task: oc-cmd@3
-  displayName: 'Start new build'
+- task: PowerShell@2
+  displayName: Log-in                   	# for ACR password will be Access key
   inputs:
-    connectionType: 'OpenShift Connection Service'
-    openshiftService: 'OpenShift'
-    version: '4.12.0'
-    cmd: 'oc start-build dummy --follow'
+    targetType: 'inline'
+    script: |
+      docker login -u abhinavkataria12345@gmail.com -p abhi@9212			
+    workingDirectory: '$(Build.SourcesDirectory)'
+
+- task: PowerShell@2
+  displayName: Push
+  inputs:
+    targetType: 'inline'
+    script: |
+      docker push abhikataria/denn:latest
+    workingDirectory: '$(Build.SourcesDirectory)'
+
+- task: PowerShell@2
+  displayName: 'Deploy to OpenShift'
+  inputs:
+    targetType: 'inline'
+    script: |
+      oc login --token=sha256~Fag0MYBnp0dBbYFbRILSVQJENyBVJnERrcvl0DXBsc4 --server=https://api.sandbox-m3.1530.p1.openshiftapps.com:6443
+      oc project abhinavkataria12345-dev
+      oc new-app mydummapp
+      oc expose service mydummapp
+    workingDirectory: '$(Build.SourcesDirectory)'
