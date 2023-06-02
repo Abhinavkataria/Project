@@ -13,7 +13,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      docker build -t myproj:latest .
+      docker build -t myproj1:latest .
     workingDirectory: '$(Build.SourcesDirectory)'
   
 - task: PowerShell@2
