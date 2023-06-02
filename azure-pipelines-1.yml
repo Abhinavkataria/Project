@@ -19,7 +19,7 @@ steps:
   displayName: 'create new app'
   inputs:
     connectionType: 'OpenShift Connection Service'
-    openshiftService: 'OpenShift'
+    openshiftService: 'demo'
     version: '4.12.0'
     cmd: 'oc new-app --image-stream="openshift/dotnet:6.0" https://github.com/Abhinavkataria/Project --name=app6'
     #cmd: 'oc new-app sanju333/aspapp:$(Build.BuildId) --name=<app-name>'		#If docker Image is used for deployment
