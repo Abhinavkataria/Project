@@ -30,7 +30,9 @@ steps:
     script: |
       $dockerUsername = "$(DOCKER_USERNAME)"
       $dockerPassword = "$(DOCKER_PASSWORD)"
-      docker login -u $dockerUsername -p $dockerPassword
+      $securePassword = ConvertTo-SecureString -String $dockerPassword -AsPlainText -Force
+      $credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $dockerUsername, $securePassword
+      $credential.GetNetworkCredential().Password | docker login --username $credential.UserName --password-stdin
     workingDirectory: '$(Build.SourcesDirectory)'
 
 - task: PowerShell@2
