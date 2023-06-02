@@ -24,6 +24,16 @@ steps:
     workingDirectory: '$(Build.SourcesDirectory)'
 
 - task: PowerShell@2
+  displayName: Log-in                   	# for ACR password will be Access key
+  inputs:
+    targetType: 'inline'
+    script: |
+      $dockerUsername = "$(DOCKER_USERNAME)"
+      $dockerPassword = "$(DOCKER_PASSWORD)"
+      docker login -u $dockerUsername -p $dockerPassword
+    workingDirectory: '$(Build.SourcesDirectory)'
+
+- task: PowerShell@2
   displayName: Push
   inputs:
     targetType: 'inline'
