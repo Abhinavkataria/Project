@@ -24,22 +24,13 @@ steps:
     workingDirectory: '$(Build.SourcesDirectory)'
 
 - task: PowerShell@2
-  displayName: 'Log in to Docker registry'
+  displayName: Log-in                   	# for ACR password will be Access key
   inputs:
-      targetType: 'inline'
-      script: |
-        $dockerUsername = 'abhinavkataria12345@gmail.com'
-        $dockerPassword = 'Abhinavkataria12345'
-        $dockerRegistry = 'docker.io:abhikataria'
+    targetType: 'inline'
+    script: |
+      docker login -u abhinavkataria12345@gmail.com -p Abhinavkataria12345
+    workingDirectory: '$(Build.SourcesDirectory)'
 
-        $securePassword = ConvertTo-SecureString -String $dockerPassword -AsPlainText -Force
-        $credentials = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $dockerUsername, $securePassword
-
-        $registryName = ($dockerRegistry -split '/')[0]
-        $registryPort = ($dockerRegistry -split '/')[2].Split(':')[1]
-        $registryURL = "$registryName:$registryPort"
-
-        docker login -u $credentials.UserName -p $credentials.GetNetworkCredential().Password $registryURL
 - task: PowerShell@2
   displayName: Push
   inputs:
