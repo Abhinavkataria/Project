@@ -30,7 +30,7 @@ steps:
       script: |
         $dockerUsername = 'abhinavkataria12345@gmail.com'
         $dockerPassword = 'Abhinavkataria12345'
-        $dockerRegistry = 'docker.io/abhikataria/myproj'
+        $dockerRegistry = 'docker.io:abhikataria'
 
         $securePassword = ConvertTo-SecureString -String $dockerPassword -AsPlainText -Force
         $credentials = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $dockerUsername, $securePassword
