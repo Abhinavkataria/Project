@@ -28,9 +28,18 @@ steps:
   inputs:
       targetType: 'inline'
       script: |
-        $dockerRegistry = Get-AzureRmContainerRegistryConnection -RegistryName 'dockerhub'
-        docker login -u $dockerRegistry.Username -p $dockerRegistry.Password $dockerRegistry.LoginServer
+        $dockerUsername = 'abhinavkataria12345@gmail.com'
+        $dockerPassword = 'Abhinavkataria12345'
+        $dockerRegistry = 'docker.io/abhikataria/myproj'
 
+        $securePassword = ConvertTo-SecureString -String $dockerPassword -AsPlainText -Force
+        $credentials = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $dockerUsername, $securePassword
+
+        $registryName = ($dockerRegistry -split '/')[0]
+        $registryPort = ($dockerRegistry -split '/')[2].Split(':')[1]
+        $registryURL = "$registryName:$registryPort"
+
+        docker login -u $credentials.UserName -p $credentials.GetNetworkCredential().Password $registryURL
 - task: PowerShell@2
   displayName: Push
   inputs:
