@@ -28,7 +28,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      docker login -u abhinavkataria12345@gmail.com -p Abhinavkataria12345
+     sudo docker login -u abhinavkataria12345@gmail.com -p Abhinavkataria12345
     workingDirectory: '$(Build.SourcesDirectory)'
 
 - task: PowerShell@2
