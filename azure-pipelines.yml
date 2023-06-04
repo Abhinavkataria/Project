@@ -36,7 +36,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      docker push abhikataria/denn:latest
+      docker push aviii9643/denn:latest
     workingDirectory: '$(Build.SourcesDirectory)'
 
 - task: PowerShell@2
