@@ -20,7 +20,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      docker tag denny:latest abhikataria/demo123:latest
+      docker tag denny:latest abhikataria/demo1234:latest
     workingDirectory: '$(Build.SourcesDirectory)'
 
 - task: PowerShell@2
@@ -36,7 +36,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      docker push aviii9643/demo123:latest
+      docker push aviii9643/demo1234:latest
     workingDirectory: '$(Build.SourcesDirectory)'
 
 - task: PowerShell@2
